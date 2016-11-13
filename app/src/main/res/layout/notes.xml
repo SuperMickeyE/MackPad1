@@ -10,7 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="mackdev.mackpad.MainActivity"
-    tools:showIn="@layout/app_bar_main"
     android:id="@+id/Notes">
 
     <EditText
@@ -30,5 +29,15 @@
         android:text="Notes"
         android:id="@+id/notesText"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Add Note"
+        android:onClick="addNote"
+        android:id="@+id/button"
+        android:layout_marginTop="33dp"
+        android:layout_below="@+id/editText"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

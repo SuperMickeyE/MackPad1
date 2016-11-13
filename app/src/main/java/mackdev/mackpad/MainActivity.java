@@ -1,11 +1,9 @@
 package mackdev.mackpad;
-
+import android.content.ContentValues;
+import android.os.Bundle;
+import android.view.View;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -14,10 +12,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +106,17 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void addNote(View view){
+        EditText mEdit = (EditText) findViewById(R.id.editText);
+        DBHelper helper = new DBHelper(this);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DB.DBNotes.COLUMN_NAME_TEXT, mEdit.getText().toString());
+        long newRowId = db.insert(DB.DBNotes.TABLE_NAME, null, values);
+//        int number = db.delete(DB.DBNotes.TABLE_NAME, null, null);
+//        Log.v("numberDeleted", Integer.toString(number));
     }
 
 }
