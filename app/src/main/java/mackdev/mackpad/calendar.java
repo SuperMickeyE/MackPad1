@@ -1,29 +1,15 @@
 package mackdev.mackpad;
 
+import com.roomorama.caldroid.CaldroidFragment;
+import com.roomorama.caldroid.CaldroidGridAdapter;
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-/**
- * A simple {@link Fragment} subclass.
- */
-public class calendar extends Fragment {
-
-
-    public calendar() {
-        // Required empty public constructor
-    }
-
+public class calendar extends CaldroidFragment {
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.calendar, container, false);
-        return rootView;
+    public CaldroidGridAdapter getNewDatesGridAdapter(int month, int year) {
+        // TODO Auto-generated method stub
+        return new caldroidCustomAdapter(getActivity(), month, year,
+                getCaldroidData(), extraData);
     }
 
 }

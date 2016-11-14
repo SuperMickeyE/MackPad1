@@ -1,4 +1,6 @@
 package mackdev.mackpad;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import android.content.ContentValues;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.Cursor;
 import android.util.Log;
 
 public class MainActivity extends AppCompatActivity
@@ -89,9 +92,6 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_notes) {
             title = "Notes";
             fragment = new notes();
-        } else if (id == R.id.nav_reminders) {
-            title="Reminders";
-            fragment = new reminders();
         }
 
         // Insert the fragment by replacing any existing fragment
@@ -113,10 +113,11 @@ public class MainActivity extends AppCompatActivity
         DBHelper helper = new DBHelper(this);
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues values = new ContentValues();
+        EditText dateText = (EditText) findViewById(R.id.dateText);
         values.put(DB.DBNotes.COLUMN_NAME_TEXT, mEdit.getText().toString());
+        values.put(DB.DBNotes.COLUMN_NAME_DATE, dateText.getText().toString());
         long newRowId = db.insert(DB.DBNotes.TABLE_NAME, null, values);
 //        int number = db.delete(DB.DBNotes.TABLE_NAME, null, null);
 //        Log.v("numberDeleted", Integer.toString(number));
     }
-
 }
