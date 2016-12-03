@@ -1,23 +1,31 @@
 package mackdev.mackpad;
-import java.util.Date;
-import java.text.SimpleDateFormat;
+
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.View;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.Cursor;
-import android.util.Log;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -114,9 +122,39 @@ public class MainActivity extends AppCompatActivity
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues values = new ContentValues();
         EditText dateText = (EditText) findViewById(R.id.dateText);
+        CheckBox alarmCheckbox = (CheckBox)findViewById(R.id.alarm);
+        Boolean alarmState = alarmCheckbox.isChecked();
+        int alarmValue = alarmState ? 1 : 0;
         values.put(DB.DBNotes.COLUMN_NAME_TEXT, mEdit.getText().toString());
         values.put(DB.DBNotes.COLUMN_NAME_DATE, dateText.getText().toString());
-        long newRowId = db.insert(DB.DBNotes.TABLE_NAME, null, values);
+        values.put(DB.DBNotes.COLUMN_NAME_ALARM, alarmValue);
+        if(alarmState){
+            Intent alarmIntent = new Intent(view.getContext(), alarmReceiver.class);
+            Calendar calendar = Calendar.getInstance();
+//            String ymd = dateText.getText().toString() + " 09:00:00";
+            String ymd = dateText.getText().toString();
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = new Date();
+            try{
+                date = (Date)df.parse(ymd);
+            } catch (ParseException e) {
+                Log.d("Error", e.toString());
+            }
+            calendar.setTime(date);
+            calendar.add(Calendar.HOUR, new Date().getHours());
+            calendar.add(Calendar.SECOND, new Date().getSeconds());
+            calendar.add(Calendar.MINUTE, new Date().getMinutes());
+            calendar.add(Calendar.SECOND, 10);
+            Log.d("Time", calendar.getTime().toString());
+            alarmIntent.putExtra("Note", mEdit.getText().toString());
+            PendingIntent pending_intent = PendingIntent.getBroadcast(MainActivity.this, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            //Set the Alarm Manager
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending_intent);
+
+        }
+//        long newRowId = db.insert(DB.DBNotes.TABLE_NAME, null, values);
 //        int number = db.delete(DB.DBNotes.TABLE_NAME, null, null);
 //        Log.v("numberDeleted", Integer.toString(number));
     }

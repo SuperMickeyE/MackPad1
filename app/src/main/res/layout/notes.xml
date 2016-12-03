@@ -75,5 +75,14 @@
              />
     </LinearLayout>
 
+    <CheckBox
+        android:text="Alarm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/date"
+        android:layout_alignParentStart="true"
+        android:id="@+id/alarm"
+        android:layout_alignParentEnd="true" />
+
 
 </RelativeLayout>
