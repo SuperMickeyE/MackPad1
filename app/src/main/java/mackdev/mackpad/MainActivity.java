@@ -141,12 +141,9 @@ public class MainActivity extends AppCompatActivity
                 Log.d("Error", e.toString());
             }
             calendar.setTime(date);
-            calendar.add(Calendar.HOUR, new Date().getHours());
-            calendar.add(Calendar.SECOND, new Date().getSeconds());
-            calendar.add(Calendar.MINUTE, new Date().getMinutes());
-            calendar.add(Calendar.SECOND, 10);
+            calendar.add(Calendar.HOUR, 9);
             Log.d("Time", calendar.getTime().toString());
-            alarmIntent.putExtra("Note", mEdit.getText().toString());
+            alarmIntent.putExtra("Note", mEdit.getText());
             PendingIntent pending_intent = PendingIntent.getBroadcast(MainActivity.this, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             //Set the Alarm Manager
